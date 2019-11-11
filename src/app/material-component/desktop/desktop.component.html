@@ -102,12 +102,15 @@
     <div style="display: block;" *ngIf="barChartData">
       <canvas baseChart width="500" height="200" [datasets]="lineChartData" [labels]="lineChartLabels"
         [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
-        [plugins]="lineChartPlugins">
+        >
       </canvas>
     </div>
 
   </mat-card-content>
 </mat-card>
 
+
+
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
 </ngx-loading>
+

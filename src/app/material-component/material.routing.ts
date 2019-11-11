@@ -5,6 +5,7 @@ import { ChipsComponent } from './chips/chips.component';
 // Importaciones
 import { DesktopComponent } from './desktop/desktop.component';
 import { MobileComponent } from './mobile/mobile.component';
+import { PruebasComponent } from './pruebas/pruebas.component';
 
 export const MaterialRoutes: Routes = [
   {
@@ -18,5 +19,9 @@ export const MaterialRoutes: Routes = [
   {
     path: 'mobile',
     component: MobileComponent
+  },
+  {
+    path: 'pruebas',
+    component: PruebasComponent
   }
 ];

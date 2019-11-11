@@ -1,23 +1,11 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatosService } from '../../services/datos.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
+import { PeriodicElement } from '../../models/periodic-element';
 
-export interface PeriodicElement {
-  device?: string;
-  platform?: string;
-  locale?: string;
-  first_render_time?: number;
-  total_load_time?: number;
-  total_size?: number;
-  load_without_js?: number;
-  request?: number;
-  score?: number
-  created?: string;
-  id?: number;
-}
 
 @Component({
   selector: 'app-desktop',
@@ -25,18 +13,20 @@ export interface PeriodicElement {
   styleUrls: ['./desktop.component.css']
 })
 export class DesktopComponent implements OnInit {
-  
-  displayedColumns = ['first_render_time', 'total_load_time', 'total_size', 'request', 'device', 'locale','platform','score', 'created'];
+
+  displayedColumns = ['first_render_time', 'total_load_time', 'total_size', 'request', 'device', 'locale', 'platform', 'score', 'created'];
   data: any[];
   dataSource: PeriodicElement[];
   fromDate = '';
   toDate = '';
+  
   lineChartData: ChartDataSets[];
   lineChartLabels: Label[];
   lineChartOptions: (ChartOptions & { annotation: any });
   lineChartColors: Color[];
   lineChartLegend = true;
   lineChartType = 'line';
+
   time: any[] = [];
   date: any[] = [];
   loading = false;
@@ -48,7 +38,7 @@ export class DesktopComponent implements OnInit {
   //Inicializacion del modulo 
   ngOnInit() {
     this.loading = true;
-    
+
     this.datos.getDesktopLimit().subscribe(
       res => {
         this.loading = false;
@@ -88,9 +78,6 @@ export class DesktopComponent implements OnInit {
 
   }
 
-
-
-
   getFilter(data) {
 
     data.sort((a, b) => a.id - b.id);
@@ -100,6 +87,8 @@ export class DesktopComponent implements OnInit {
     }
 
     this.lineChartData = [{ data: this.time, label: 'Time Render' }]
+    console.log('Desktop', this.lineChartData);
+    
     this.lineChartLabels = this.date;
     this.lineChartOptions = {
       responsive: true,
@@ -141,11 +130,11 @@ export class DesktopComponent implements OnInit {
     this.datos.getDataDesktopNow().subscribe(
       res => {
         this.loading = false;
-         location.reload();
+        location.reload();
       }
-      )
-     
-    }
+    )
+
+  }
 
 }
 

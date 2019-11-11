@@ -1,0 +1,86 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxFlex.gt-sm="100%" fxFlex="100">
+        <mat-card>
+            <mat-card-content>
+                <form class="date-block" [formGroup]="filterForm">
+                    <div class="date-block__list">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="fromDate" placeholder="From Date"
+                                formControlName="fromDate">
+                            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                            <mat-datepicker #fromDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="date-block__list">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="toDate" placeholder="To Date" formControlName="toDate">
+                            <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                            <mat-datepicker #toDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="example-button-row">
+                        <button mat-raised-button color="primary" (click)="applyFilter()">Submit</button>
+                        <button mat-raised-button color="warn" (click)="getDataNow()">Get Data</button>
+                        <button mat-raised-button color="accent" (click)="exportAsXLSX()">Download</button>
+                    </div>
+                </form>
+
+
+
+                <h6>Total registros: {{date.length}} </h6>
+                <app-tables  *ngIf="!this.loading"  [dataSource]="dataTble"></app-tables>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<mat-card>
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="Short tab">
+            <mat-card-content>
+
+                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Long tab">
+            <mat-card-content>
+
+                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Long tab">
+            <mat-card-content>
+
+                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Long tab">
+            <mat-card-content>
+
+                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Long tab">
+            <mat-card-content>
+
+                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Long tab">
+            <mat-card-content>
+
+                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+
+            </mat-card-content>
+        </mat-tab>
+    </mat-tab-group>
+</mat-card>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+</ngx-loading>
