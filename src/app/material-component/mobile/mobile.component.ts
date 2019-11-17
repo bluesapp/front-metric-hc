@@ -4,20 +4,11 @@ import { FormGroup, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
+import { PeriodicElement } from '../../models/periodic-element';
 
-export interface PeriodicElement {
-  device?: string;
-  platform?: string;
-  locale?: string;
-  first_render_time?: number;
-  total_load_time?: number;
-  total_size?: number;
-  load_without_js?: number;
-  request?: number;
-  score?: number
-  created?: string;
-  id?: number;
-}
+import { ExportexcelService } from '../../services/exportexcel.service';
+
+
 
 @Component({
   selector: 'app-mobile',
@@ -26,42 +17,58 @@ export interface PeriodicElement {
 })
 export class MobileComponent implements OnInit {
 
-  displayedColumns = ['first_render_time', 'total_load_time', 'total_size', 'request', 'device', 'locale', 'platform', 'score', 'created'];
-  data: any[];
-  dataSource: PeriodicElement[];
+  data: any[] = [];
+  dataGraphic: any[];
+  dataTble: any[] = [];
+
+  dataSource: PeriodicElement[] = [];
   fromDate = '';
   toDate = '';
-  lineChartData: ChartDataSets[];
+
+  // lineChartOptions: (ChartOptions & { annotation: any });
+  // lineChartColors: Color[];
+
   lineChartLabels: Label[];
-  lineChartOptions: (ChartOptions & { annotation: any });
-  lineChartColors: Color[];
-  lineChartLegend = true;
-  lineChartType = 'line';
-  time: any[] = [];
+  lCDtimeTLT: ChartDataSets[];
+  lCDtimeFLT: ChartDataSets[];
+  lCDtimeWJT: ChartDataSets[];
+  lCDtotalSize: ChartDataSets[];
+  lCDrequests: ChartDataSets[];
+  lCDscore: ChartDataSets[];
+
+
+
+
+  timeTLT: any[] = [];
+  timeFLT: any[] = [];
+  timeWJT: any[] = [];
+  totalSize: any[] = [];
+  requests: any[] = [];
+  score: any[] = [];
+
   date: any[] = [];
   loading = false;
-  barChartData = false;
 
-  constructor(private datos: DatosService) {
+
+  constructor(private datos: DatosService, private exportExcelService: ExportexcelService) {
+
   }
 
   //Inicializacion del modulo 
   ngOnInit() {
-    this.loading = true;
+    this.timeTLT = [];
+    this.date = [];
     this.datos.getMobileLimit().subscribe(
       res => {
         this.loading = false;
         this.data = [res];
         this.dataSource = this.data[0];
-        // console.log(this.dataSource)
-        this.barChartData = true;
-
-        this.getFilter(this.dataSource);
+        this.getFilterGr();
+        this.getFilterTa();
       }
     )
+    this.loading = true;
   }
-
-
 
   filterForm = new FormGroup({
     fromDate: new FormControl(),
@@ -69,9 +76,10 @@ export class MobileComponent implements OnInit {
   });
 
   // Aplicar filtros de fechas
+
   applyFilter() {
     this.loading = true;
-    this.time = [];
+    this.timeTLT = [];
     this.date = [];
 
     this.fromDate = this.filterForm.get('fromDate').value;
@@ -83,68 +91,63 @@ export class MobileComponent implements OnInit {
       res => {
         this.data = [res]
         this.dataSource = this.data[0];
-        this.getFilter(this.dataSource);
+        this.getFilterGr();
+        this.getFilterTa();
       }
     )
 
   }
 
+  getFilterTa() {
+    this.dataTble = this.dataSource.sort((a, b) => b.id - a.id);
+    this.loading = false
+  }
 
 
-
-  getFilter(data) {
-
-    data.sort((a, b) => a.id - b.id);
-    for (let entry of data) {
-      this.time.push(entry.total_load_time * 0.001)
+  getFilterGr() {
+    this.dataGraphic = this.dataSource.sort((a, b) => a.id - b.id);
+    for (let entry of this.dataGraphic) {
       this.date.push(moment(entry.created).format('DD-MM-YYYY HH:mm'))
+      this.timeTLT.push(entry.total_load_time * 0.001)
+      this.timeFLT.push(entry.first_render_time * 0.001)
+      this.timeWJT.push(entry.load_without_js * 0.001)
+      this.totalSize.push(entry.total_size * 0.000001);
+      this.requests.push(entry.request);
+      this.score.push(entry.score * 100);
     }
 
-    this.lineChartData = [{ data: this.time, label: 'Time Render' }]
-    this.lineChartLabels = this.date;
-    this.lineChartOptions = {
-      responsive: true,
-      annotation: {
-        annotations: [
-          {
-            type: 'line',
-            mode: 'vertical',
-            scaleID: 'x-axis-0',
-            value: 'March',
-            borderColor: 'orange',
-            borderWidth: 2,
-            label: {
-              enabled: true,
-              fontColor: 'orange',
-              content: 'LineAnno'
-            }
-          },
-        ],
-      },
-    };
 
-    this.lineChartColors = [
-      { // blue
-        backgroundColor: 'rgba(213,248,236,0.3)',
-        borderColor: 'rgba(74,224,218,1)',
-        pointBackgroundColor: 'rgba(74,224,218,1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-      }
-    ];
-    this.loading = false;
+    this.lineChartLabels = this.date;
+    this.lCDtimeTLT = [{ data: this.timeTLT, label: 'Total Render' }];
+    this.lCDtimeFLT = [{ data: this.timeFLT, label: 'First Render' }];
+    this.lCDtimeWJT = [{ data: this.timeWJT, label: 'W. JS Render' }];
+    this.lCDtotalSize = [{ data: this.totalSize, label: 'Total Sizes mb' }];
+    this.lCDrequests = [{ data: this.requests, label: 'Requests' }];
+    this.lCDscore = [{ data: this.score, label: 'Score %' }];
+
+
+    this.loading = false
   }
+
 
 
   getDataNow() {
     this.loading = true;
     this.datos.getDataMobileNow().subscribe(
       res => {
+        setTimeout(() => {
+          this.ngOnInit();
+        }, 500);
+
         this.loading = false;
-        location.reload();
+        // location.reload();
       }
     )
-
   }
+
+
+  exportAsXLSX(): void {
+    this.exportExcelService.exportAsExcelFile(this.dataTble, 'Performace');
+  }
+
 }

@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class DatosService {
 
-  API_URI = 'http://localhost:3000';
+  API_URI = 'http://performanceatg.azurewebsites.net';
+  
+  
 
   constructor(private http: HttpClient) { }
 
@@ -21,6 +24,9 @@ export class DatosService {
   getMobileLimit() {
     return this.http.get(`${this.API_URI}/api/psidb/getmobile`);
   }
+  getDevicesLimit() {
+    return this.http.get(`${this.API_URI}/api/psidb/getdevices`);
+  }
 
   getDesktopFilter(fromDate, toDate) {
     return this.http.get(`${this.API_URI}/api/psidb/getdesktop/${fromDate},${toDate}`);
@@ -28,6 +34,9 @@ export class DatosService {
 
   getMobileFilter(fromDate, toDate) {
     return this.http.get(`${this.API_URI}/api/psidb/getmobile/${fromDate},${toDate}`);
+  }
+  getDevicesFilter(fromDate, toDate) {
+    return this.http.get(`${this.API_URI}/api/psidb/getdevices/${fromDate},${toDate}`);
   }
 
   getDataMobileNow() {
@@ -38,4 +47,5 @@ export class DatosService {
     return this.http.get(`${this.API_URI}/api/psi/desktop`);
 
   }
+  
 }

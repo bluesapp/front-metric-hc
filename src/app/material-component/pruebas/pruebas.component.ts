@@ -25,17 +25,39 @@ export class PruebasComponent implements OnInit {
   fromDate = '';
   toDate = '';
 
-  lineChartOptions: (ChartOptions & { annotation: any });
-  lineChartColors: Color[];
-  lineChartData: ChartDataSets[];
-  lineChartLabels: Label[];
+  // lineChartOptions: (ChartOptions & { annotation: any });
+  // lineChartColors: Color[];
 
-  time: any[] = [];
+  lineChartLabels: Label[];
+  lCDtimeTLT: ChartDataSets[];
+  lCDtimeFLT: ChartDataSets[];
+  lCDtimeWJT: ChartDataSets[];
+  lCDtotalSize: ChartDataSets[];
+  lCDrequests: ChartDataSets[];
+  lCDscore: ChartDataSets[];
+
+
+
+
+  timeTLT: any[] = [];
+  timeFLT: any[] = [];
+  timeWJT: any[] = [];
+  totalSize: any[] = [];
+  requests: any[] = [];
+  score: any[] = [];
+
   date: any[] = [];
   loading = false;
 
 
   constructor(private datos: DatosService, private exportExcelService: ExportexcelService) {
+
+  }
+
+  //Inicializacion del modulo 
+  ngOnInit() {
+    this.timeTLT = [];
+    this.date = [];
     this.datos.getDesktopLimit().subscribe(
       res => {
         this.loading = false;
@@ -45,10 +67,6 @@ export class PruebasComponent implements OnInit {
         this.getFilterTa();
       }
     )
-  }
-
-  //Inicializacion del modulo 
-  ngOnInit() {
     this.loading = true;
   }
 
@@ -61,7 +79,7 @@ export class PruebasComponent implements OnInit {
 
   applyFilter() {
     this.loading = true;
-    this.time = [];
+    this.timeTLT = [];
     this.date = [];
 
     this.fromDate = this.filterForm.get('fromDate').value;
@@ -88,13 +106,28 @@ export class PruebasComponent implements OnInit {
 
   getFilterGr() {
     this.dataGraphic = this.dataSource.sort((a, b) => a.id - b.id);
+    console.log(this.dataGraphic);
+
     for (let entry of this.dataGraphic) {
       this.date.push(moment(entry.created).format('DD-MM-YYYY HH:mm'))
-      this.time.push(entry.total_load_time * 0.001)
+      this.timeTLT.push(entry.total_load_time * 0.001)
+      this.timeFLT.push(entry.first_render_time * 0.001)
+      this.timeWJT.push(entry.load_without_js * 0.001)
+      this.totalSize.push(entry.total_size * 0.000001);
+      this.requests.push(entry.request);
+      this.score.push(entry.score * 100);
     }
 
-    this.lineChartData = [{ data: this.time, label: 'Time Render' }];
+
     this.lineChartLabels = this.date;
+    this.lCDtimeTLT = [{ data: this.timeTLT, label: 'Total Render' }];
+    this.lCDtimeFLT = [{ data: this.timeFLT, label: 'First Render' }];
+    this.lCDtimeWJT = [{ data: this.timeWJT, label: 'W. JS Render' }];
+    this.lCDtotalSize = [{ data: this.totalSize, label: 'Total Sizes mb' }];
+    this.lCDrequests = [{ data: this.requests, label: 'Requests' }];
+    this.lCDscore = [{ data: this.score, label: 'Score %' }];
+
+
     this.loading = false
   }
 
@@ -104,8 +137,13 @@ export class PruebasComponent implements OnInit {
     this.loading = true;
     this.datos.getDataDesktopNow().subscribe(
       res => {
+        setTimeout(() => {
+          console.log('Test');
+          this.ngOnInit();
+        }, 500);
+
         this.loading = false;
-        location.reload();
+        // location.reload();
       }
     )
   }

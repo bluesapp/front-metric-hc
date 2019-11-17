@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { AppRoutes } from './app.routing';
 import { AppComponent } from './app.component';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -17,6 +16,10 @@ import { DemoMaterialModule } from './demo-material-module';
 
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
+
+
+import { AppRoutes } from './app.routing';
+// import { AppRoutingModule } from './app.routing';
 
 
 
@@ -36,7 +39,8 @@ import { SpinnerComponent } from './shared/spinner.component';
     FlexLayoutModule,
     HttpClientModule,
     SharedModule,
-    RouterModule.forRoot(AppRoutes)
+    // AppRoutingModule
+    RouterModule.forRoot(AppRoutes, { useHash: true }) 
   ],
   providers: [
     {

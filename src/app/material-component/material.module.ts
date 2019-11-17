@@ -26,6 +26,7 @@ import { GraphicComponent } from '../components/graphic/graphic.component';
 
 // Reloader
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
+import { DevicesComponent } from './devices/devices.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
     MobileComponent,
     PruebasComponent,
     TablesComponent,
-    GraphicComponent
+    GraphicComponent,
+    DevicesComponent
     
   ]
 })

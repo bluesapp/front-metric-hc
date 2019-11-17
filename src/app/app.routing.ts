@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { DevicesComponent } from './material-component/devices/devices.component';
 
 import { FullComponent } from './layouts/full/full.component';
 
@@ -9,7 +11,7 @@ export const AppRoutes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/starter',
+        redirectTo: '/devices',
         pathMatch: 'full'
       },
       {
@@ -20,7 +22,22 @@ export const AppRoutes: Routes = [
       {
         path: 'starter',
         loadChildren: () => import('./starter/starter.module').then(m => m.StarterModule)
+      },
+      {
+        path: '**',
+        redirectTo: '/devices'
       }
     ]
+
   }
+
 ];
+
+// @NgModule({
+//   imports: [RouterModule.forRoot(AppRoutes, { useHash: true })],
+//   exports: [RouterModule]
+// })
+// export class AppRoutingModule { }
+
+
+

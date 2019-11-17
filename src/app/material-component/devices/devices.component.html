@@ -1,0 +1,118 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxFlex.gt-sm="100%" fxFlex="100">
+        <mat-card>
+            <mat-card-content>
+                <form class="date-block" [formGroup]="filterForm">
+                    <div class="date-block__list">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="fromDate" placeholder="From Date"
+                                formControlName="fromDate">
+                            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                            <mat-datepicker #fromDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="date-block__list">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="toDate" placeholder="To Date" formControlName="toDate">
+                            <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                            <mat-datepicker #toDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </form>
+                <div class="example-button-row">
+                    <button mat-raised-button color="primary" (click)="applyFilter()">Submit</button>
+                    <!-- <button mat-raised-button color="warn" (click)="getDataNow()">Get Data</button> -->
+                    <button mat-raised-button color="accent" (click)="exportAsXLSX()">Download</button>
+                </div>
+
+
+
+                <h6>Total records: {{date.length}} </h6>
+                <app-tables *ngIf="!this.loading" [dataSource]="dataTble"></app-tables>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<!-- <mat-card class="example-card">
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="Total Load T.">
+            <mat-card-content>
+
+                <div style="display: block;">
+                    <canvas *ngIf="!this.loading" baseChart width="500" height="200" [datasets]="lCDtimeTLT"
+                        [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+                    </canvas>
+                </div>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="First Render T.">
+            <mat-card-content>
+
+                <div style="display: block;">
+                    <canvas *ngIf="!this.loading" baseChart width="500" height="200" [datasets]="lCDtimeTLT"
+                        [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+                    </canvas>
+                </div>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Whitout JS">
+            <mat-card-content>
+
+                <div style="display: block;">
+                    <canvas *ngIf="!this.loading" baseChart width="500" height="200" [datasets]="lCDtimeTLT"
+                        [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+                    </canvas>
+                </div>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Total size">
+            <mat-card-content>
+
+                <div style="display: block;">
+                    <canvas *ngIf="!this.loading" baseChart width="500" height="200" [datasets]="lCDtimeTLT"
+                        [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+                    </canvas>
+                </div>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Requests">
+            <mat-card-content>
+
+                <div style="display: block;">
+                    <canvas *ngIf="!this.loading" baseChart width="500" height="200" [datasets]="lCDtimeTLT"
+                        [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+                    </canvas>
+                </div>
+
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Score">
+            <mat-card-content>
+
+                <div style="display: block;">
+                    <canvas *ngIf="!this.loading" baseChart width="500" height="200" [datasets]="lCDtimeTLT"
+                        [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+                    </canvas>
+                </div>
+
+            </mat-card-content>
+        </mat-tab>
+    </mat-tab-group>
+</mat-card> -->
+
+
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" >
+</ngx-loading>

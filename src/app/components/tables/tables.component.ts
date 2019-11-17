@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material';
   styleUrls: ['./tables.component.scss']
 })
 export class TablesComponent implements OnInit {
-  displayedColumns = ['first_render_time', 'total_load_time', 'total_size', 'request', 'device', 'locale', 'platform', 'score', 'created'];
+  displayedColumns = ['total_load_time', 'first_render_time', 'whitout_js', 'total_size', 'request', 'device', 'locale', 'platform', 'score', 'created'];
   @Input() dataSource: PeriodicElement[];
   dataSources = new MatTableDataSource<PeriodicElement>();
 

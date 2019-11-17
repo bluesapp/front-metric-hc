@@ -8,24 +8,27 @@ import { PeriodicElement } from '../../models/periodic-element';
 
 import { ExportexcelService } from '../../services/exportexcel.service';
 
-
 @Component({
-  selector: 'app-desktop',
-  templateUrl: './desktop.component.html',
-  styleUrls: ['./desktop.component.css']
+  selector: 'app-devices',
+  templateUrl: './devices.component.html',
+  styleUrls: ['./devices.component.css']
 })
-export class DesktopComponent implements OnInit {
+export class DevicesComponent implements OnInit {
+
 
   data: any[] = [];
+  dataSource: PeriodicElement[] = [];
+
   dataGraphic: any[];
+  dataGraphicM: any[];
   dataTble: any[] = [];
 
-  dataSource: PeriodicElement[] = [];
+  lineChartLegend = true;
+  lineChartType = 'line';
+  lineChartPlugins = [];
+
   fromDate = '';
   toDate = '';
-
-  // lineChartOptions: (ChartOptions & { annotation: any });
-  // lineChartColors: Color[];
 
   lineChartLabels: Label[];
   lCDtimeTLT: ChartDataSets[];
@@ -35,10 +38,8 @@ export class DesktopComponent implements OnInit {
   lCDrequests: ChartDataSets[];
   lCDscore: ChartDataSets[];
 
-
-
-
   timeTLT: any[] = [];
+  timeTLTM: any[] = [];
   timeFLT: any[] = [];
   timeWJT: any[] = [];
   totalSize: any[] = [];
@@ -57,7 +58,7 @@ export class DesktopComponent implements OnInit {
   ngOnInit() {
     this.timeTLT = [];
     this.date = [];
-    this.datos.getDesktopLimit().subscribe(
+    this.datos.getDevicesLimit().subscribe(
       res => {
         this.loading = false;
         this.data = [res];
@@ -66,6 +67,7 @@ export class DesktopComponent implements OnInit {
         this.getFilterTa();
       }
     )
+    
     this.loading = true;
   }
 
@@ -86,7 +88,7 @@ export class DesktopComponent implements OnInit {
     let a = moment(this.fromDate).format('YYYY-MM-DD');
     let b = moment(this.toDate).format('YYYY-MM-DD');
 
-    this.datos.getDesktopFilter(a, b).subscribe(
+    this.datos.getDevicesFilter(a, b).subscribe(
       res => {
         this.data = [res]
         this.dataSource = this.data[0];
@@ -103,13 +105,26 @@ export class DesktopComponent implements OnInit {
   }
 
 
+
   getFilterGr() {
-    this.dataGraphic = this.dataSource.sort((a, b) => a.id - b.id);
+    this.dataGraphic = this.dataSource.sort((a, b) => a.id - b.id).filter((a) => a.device == 'desktop');
+    this.dataGraphicM = this.dataSource.sort((a, b) => a.id - b.id).filter((a) => a.device == 'mobile');
+   
     for (let entry of this.dataGraphic) {
-      this.date.push(moment(entry.created).format('DD-MM-YYYY HH:mm'))
-      this.timeTLT.push(entry.total_load_time * 0.001)
-      this.timeFLT.push(entry.first_render_time * 0.001)
-      this.timeWJT.push(entry.load_without_js * 0.001)
+      this.date.push(moment(entry.created).format('DD-MM-YYYY HH:mm'));
+      this.timeTLT.push(entry.total_load_time * 0.001);       
+      this.timeFLT.push(entry.first_render_time * 0.001);
+      this.timeWJT.push(entry.load_without_js * 0.001);
+      this.totalSize.push(entry.total_size * 0.000001);
+      this.requests.push(entry.request);
+      this.score.push(entry.score * 100);
+    }
+   
+    for (let entry of this.dataGraphicM) {
+      this.date.push(moment(entry.created).format('DD-MM-YYYY HH:mm'));
+      this.timeTLTM.push(entry.total_load_time * 0.001);       
+      this.timeFLT.push(entry.first_render_time * 0.001);
+      this.timeWJT.push(entry.load_without_js * 0.001);
       this.totalSize.push(entry.total_size * 0.000001);
       this.requests.push(entry.request);
       this.score.push(entry.score * 100);
@@ -117,7 +132,7 @@ export class DesktopComponent implements OnInit {
 
 
     this.lineChartLabels = this.date;
-    this.lCDtimeTLT = [{ data: this.timeTLT, label: 'Total Render' }];
+    this.lCDtimeTLT = [{ data: this.timeTLT, label: 'Total Render' }, { data: this.timeTLTM, label: 'Total Render' }];
     this.lCDtimeFLT = [{ data: this.timeFLT, label: 'First Render' }];
     this.lCDtimeWJT = [{ data: this.timeWJT, label: 'W. JS Render' }];
     this.lCDtotalSize = [{ data: this.totalSize, label: 'Total Sizes mb' }];
@@ -135,7 +150,6 @@ export class DesktopComponent implements OnInit {
     this.datos.getDataDesktopNow().subscribe(
       res => {
         setTimeout(() => {
-    
           this.ngOnInit();
         }, 500);
 
@@ -145,11 +159,52 @@ export class DesktopComponent implements OnInit {
     )
   }
 
+  public lineChartOptions: (ChartOptions & { annotation: any }) = {
+
+    responsive: true,
+
+    annotation: {
+      annotations: [
+        {
+          type: 'line',
+          mode: 'vertical',
+          scaleID: 'x-axis-0',
+          value: 'March',
+          borderColor: 'orange',
+          borderWidth: 2,
+          label: {
+            enabled: true,
+            fontColor: 'orange',
+            content: 'LineAnno',
+
+          }
+        },
+      ],
+    }
+  };
+
+  public lineChartColors: Color[] = [
+    { // blue
+      backgroundColor: 'rgba(213,248,236,0.3)',
+      borderColor: 'rgba(74,224,218,1)',
+      pointBackgroundColor: 'rgba(74,224,218,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    }, { // grey
+      backgroundColor: 'rgba(213,248,236,0.3)',
+      borderColor: 'rgba(253, 137, 162,1)',
+      pointBackgroundColor: 'rgba(253, 137, 162,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    }
+  ];
+
 
   exportAsXLSX(): void {
     this.exportExcelService.exportAsExcelFile(this.dataTble, 'Performace');
   }
 
+
 }
-
-

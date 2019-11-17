@@ -1,6 +1,6 @@
 export interface PeriodicElement {
     device?: string;
-    platform?: string;
+    plataforma?: string;
     locale?: string;
     first_render_time?: number;
     total_load_time?: number;

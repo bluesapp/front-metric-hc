@@ -18,69 +18,71 @@
                             <mat-datepicker #toDate></mat-datepicker>
                         </mat-form-field>
                     </div>
-                    <div class="example-button-row">
-                        <button mat-raised-button color="primary" (click)="applyFilter()">Submit</button>
-                        <button mat-raised-button color="warn" (click)="getDataNow()">Get Data</button>
-                        <button mat-raised-button color="accent" (click)="exportAsXLSX()">Download</button>
-                    </div>
                 </form>
+                <div class="example-button-row">
+                    <button mat-raised-button color="primary" (click)="applyFilter()">Submit</button>
+                    <button mat-raised-button color="warn" (click)="getDataNow()">Get Data</button>
+                    <button mat-raised-button color="accent" (click)="exportAsXLSX()">Download</button>
+                </div>
 
 
 
-                <h6>Total registros: {{date.length}} </h6>
-                <app-tables  *ngIf="!this.loading"  [dataSource]="dataTble"></app-tables>
+                <h6>Total records: {{date.length}} </h6>
+                <app-tables *ngIf="!this.loading" [dataSource]="dataTble"></app-tables>
 
             </mat-card-content>
         </mat-card>
     </div>
 </div>
 
-<mat-card>
+<mat-card class="example-card">
     <mat-tab-group dynamicHeight>
-        <mat-tab label="Short tab">
+        <mat-tab label="Total Load T.">
             <mat-card-content>
 
-                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+                <app-graphic *ngIf="!this.loading" [datasets]="lCDtimeTLT" [labels]="lineChartLabels"></app-graphic>
 
             </mat-card-content>
         </mat-tab>
-        <mat-tab label="Long tab">
+        <mat-tab label="First Render T.">
             <mat-card-content>
 
-                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+                <app-graphic *ngIf="!this.loading" [datasets]="lCDtimeFLT" [labels]="lineChartLabels"></app-graphic>
 
             </mat-card-content>
         </mat-tab>
-        <mat-tab label="Long tab">
+        <mat-tab label="Whitout JS">
             <mat-card-content>
 
-                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+                <app-graphic *ngIf="!this.loading" [datasets]="lCDtimeWJT" [labels]="lineChartLabels"></app-graphic>
 
             </mat-card-content>
         </mat-tab>
-        <mat-tab label="Long tab">
+        <mat-tab label="Total size">
             <mat-card-content>
 
-                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+                <app-graphic *ngIf="!this.loading" [datasets]="lCDtotalSize" [labels]="lineChartLabels"></app-graphic>
 
             </mat-card-content>
         </mat-tab>
-        <mat-tab label="Long tab">
+        <mat-tab label="Requests">
             <mat-card-content>
 
-                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+                <app-graphic *ngIf="!this.loading" [datasets]="lCDrequests" [labels]="lineChartLabels"></app-graphic>
 
             </mat-card-content>
         </mat-tab>
-        <mat-tab label="Long tab">
+        <mat-tab label="Score">
             <mat-card-content>
 
-                <app-graphic *ngIf="!this.loading" [datasets]="lineChartData" [labels]="lineChartLabels"></app-graphic>
+                <app-graphic *ngIf="!this.loading" [datasets]="lCDscore" [labels]="lineChartLabels"></app-graphic>
 
             </mat-card-content>
         </mat-tab>
     </mat-tab-group>
 </mat-card>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" >
 </ngx-loading>
