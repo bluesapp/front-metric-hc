@@ -18,6 +18,7 @@ export class DatosService {
   }
   
   getDesktopLimit() {
+    
     return this.http.get(`${this.API_URI}/api/psidb/getdesktop`);
   }
 
