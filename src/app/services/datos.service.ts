@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DatosService {
 
-  API_URI = 'http://performanceatg.azurewebsites.net';
+  API_URI = 'https://soco-qa-serverperformanceatg-ase.sodhc.co';
   
   
 

@@ -3,7 +3,7 @@ import { DatosService } from '../../services/datos.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Label, Color } from 'ng2-charts';
+import { Label } from 'ng2-charts';
 import { PeriodicElement } from '../../models/periodic-element';
 
 import { ExportexcelService } from '../../services/exportexcel.service';
@@ -48,7 +48,7 @@ export class DesktopComponent implements OnInit {
   date: any[] = [];
   loading = false;
 
-
+ 
   constructor(private datos: DatosService, private exportExcelService: ExportexcelService) {
 
   }
